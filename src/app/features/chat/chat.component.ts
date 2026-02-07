@@ -679,7 +679,12 @@ export class ChatComponent implements OnInit, OnDestroy {
         if (address) {
             const activeConv = conversations.find(c => c.participant === address);
             if (activeConv) {
+                const wasAtBottom = this.isNearBottom;
                 this.selectedMessages.set(activeConv.messages);
+                this.cdr.detectChanges();
+                if (wasAtBottom) {
+                    this.scrollToBottom();
+                }
             }
         }
     }
@@ -695,11 +700,18 @@ export class ChatComponent implements OnInit, OnDestroy {
                 m => !currentIds.has(m.id) && m.direction === 'received'
             );
 
+            const wasAtBottom = this.isNearBottom;
             this.selectedMessages.set(messages);
 
             // Show indicator if there are new received messages and user isn't at bottom
-            if (newReceivedMessages.length > 0 && !this.isNearBottom) {
+            if (newReceivedMessages.length > 0 && !wasAtBottom) {
                 this.hasNewMessages.set(true);
+            }
+
+            // Preserve scroll position after re-render
+            this.cdr.detectChanges();
+            if (wasAtBottom) {
+                this.scrollToBottom();
             }
         }
     }

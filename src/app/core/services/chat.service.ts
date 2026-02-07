@@ -20,11 +20,11 @@ import {
     type ConversationData as Conversation,
 } from '@corvidlabs/ts-algochat';
 
-const MAINNET_CONFIG = {
+const TESTNET_CONFIG = {
     algodToken: '',
-    algodServer: 'https://mainnet-api.algonode.cloud',
+    algodServer: 'https://testnet-api.4160.nodely.dev',
     indexerToken: '',
-    indexerServer: 'https://mainnet-idx.algonode.cloud',
+    indexerServer: 'https://testnet-idx.4160.nodely.dev',
 };
 
 /** Extract indexer transaction fields safely (algosdk v3 uses index signatures). */
@@ -36,9 +36,9 @@ function txField<Result>(tx: unknown, field: string): Result {
 export class ChatService {
     private readonly wallet = inject(WalletService);
     private readonly pskService = inject(PSKService);
-    private readonly algorand = new AlgorandService(MAINNET_CONFIG);
-    private readonly algodClient = new algosdk.Algodv2('', MAINNET_CONFIG.algodServer, '');
-    private readonly indexerClient = new algosdk.Indexer('', MAINNET_CONFIG.indexerServer, '');
+    private readonly algorand = new AlgorandService(TESTNET_CONFIG);
+    private readonly algodClient = new algosdk.Algodv2('', TESTNET_CONFIG.algodServer, '');
+    private readonly indexerClient = new algosdk.Indexer('', TESTNET_CONFIG.indexerServer, '');
 
     readonly loading = signal(false);
     readonly error = signal<string | null>(null);
